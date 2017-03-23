@@ -7,12 +7,14 @@ const { getContainer,
   createUser } = require('./util');
 
 
+const adminId = '7fa953c3-20eb-4144-9d85-e029cd8c75a6';
+
 function pingDevices() {
   console.log('ping devices');
   // load all registered devices
 
   // ping them
-  skygear.pubsub.publish('ping', {msg: 'nothing'});
+  getContainer(adminId).pubsub.publish('ping', {msg: 'nothing'});
 
 }
 
