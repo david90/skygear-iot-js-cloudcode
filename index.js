@@ -12,6 +12,7 @@ function pingDevices() {
   // load all registered devices
 
   // ping them
+  skygear.pubsub.publish('ping', {msg: 'nothing'});
 
 }
 
