@@ -30,3 +30,7 @@ skygearCloud.handler('/ping-devices', function (req) {
   pingDevices();
   return 'Ping';
 });
+
+skygearCloud.afterSave('Report', function afterSaveReport(record, orig) {
+    console.log('afterSave Report');
+});
