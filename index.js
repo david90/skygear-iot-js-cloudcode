@@ -14,7 +14,9 @@ function pingDevices() {
   // load all registered devices
 
   // ping them
-  getContainer(adminId).pubsub.publish('ping', {msg: 'nothing'});
+  var container = getContainer(adminId);
+  container.pubsub.connect();
+  container.pubsub.publish('ping', {msg: 'nothing'});
 
 }
 
