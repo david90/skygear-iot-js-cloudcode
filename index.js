@@ -17,7 +17,7 @@ function pingDevices() {
 
 /* Auto ping every 1 minute */
 skygearCloud.every('0 * * * * *', function () {
-  console.log('in headsup schedule cronjob');
+  console.log('in scheduled ping cronjob');
   pingDevices();
 });
 
