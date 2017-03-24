@@ -37,20 +37,20 @@
 
   <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--2-col"></div>
-    <div class="mdl-cell mdl-cell--4-col">
+    <div class="mdl-cell mdl-cell--8-col">
         <h5>Click to manually ping all devices.</h5>
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ping-button">
       Ping
     </button>
     </div>
-    <div class="mdl-cell mdl-cell--4-col"></div>
   </div>
 
   <div class="mdl-grid">
     <div class="mdl-cell mdl-cell--2-col"></div>
     <div class="mdl-cell mdl-cell--4-col">
     <h5>Device Status</h5>
-      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+      <div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate"></div>
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" style="width:100%">
         <thead>
           <tr>
             <th class="mdl-data-table__cell--non-numeric">Device</th>
@@ -101,6 +101,8 @@
   function subscribePing() {
       skygear.on('ping', (data) => {
       console.log(data);
+
+      $("#p2").hide();
       replyToPing();
     });
   }
