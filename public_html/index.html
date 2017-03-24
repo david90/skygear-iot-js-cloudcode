@@ -31,7 +31,7 @@
 </style>
 
 <div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--4-col"></div>
+  <div class="mdl-cell mdl-cell--2-col"></div>
   <div class="mdl-cell mdl-cell--4-col">
       <h5>Click to manually ping all devices.</h5>
       <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ping-button">
@@ -43,7 +43,7 @@
 
 
 <div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--4-col"></div>
+  <div class="mdl-cell mdl-cell--2-col"></div>
   <div class="mdl-cell mdl-cell--4-col">
   <h5>Device Status</h5>
     <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
@@ -54,12 +54,8 @@
           <th>Last Report</th>
         </tr>
       </thead>
-      <tbody>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric">c2dn89h2hc0c9sh0sbd20en</td>
-          <td>Android</td>
-          <td>Date</td>
-        </tr>
+      <tbody class="status-table">
+      <!-- Device Status here -->
       </tbody>
     </table>
   </div>
@@ -108,7 +104,7 @@
       // whenever a device replies
       skygear.on('reply', (data) => {
       console.log('A device replied!');
-      console.log(data);
+      statusTable.updateRecord(data)
     });
   }
 
@@ -116,7 +112,9 @@
   function subscribeReportSaved() {
       skygear.on('report-saved', (data) => {
       console.log(data);
-      var message = 'Report saved from device'
+      var reportId = data._id;
+      var content = data.content;
+      var message =  ''+ content + ' (' + reportId + ')';
       showReportToast(message);
     });
   }
@@ -142,11 +140,53 @@
       });
   }
 
-
   /* UI */
 
-  $('.ping-button').on('click',function(e){
-    pingDevices();
+  // The status table view controller
+  var statusTable = null;
+  var statusTableEl = $('.status-table');
+  var statusRecordTemplate = '<tr class="status-record-row"> \
+          <td class="mdl-data-table__cell--non-numeric device"></td> \
+          <td class="platform"></td> \
+          <td class="report-time"></td> \
+          </tr>';
+
+  function StatusTable (el) {
+    this.el = el;
+    this.updateRecord = function(replyObject) {
+      console.log(replyObject);
+      var id = replyObject.device;
+      var viewArray = findRecordView(id);
+      var view = null;
+      if(viewArray.length == 0) {
+         view = createRecordView(id);
+         el.append(view);
+      } else {
+        view = viewArray[0];
+      }
+
+      $(view).find('.platform').text(replyObject.platform);
+      $(view).find('.report-time').text(replyObject.lastReply);
+
+    }
+
+    var findRecordView = function(deviceId) {
+      var view = el.find('.status-record-row[data-deviceID="'+deviceId+'"]');
+      return view;
+    }
+
+    var createRecordView = function(deviceId) {
+      var view = $(statusRecordTemplate);
+      var deviceView = view.find('.device');
+      view.attr('data-deviceId', deviceId);
+      deviceView.text(deviceId);
+      return view;
+    }
+
+  }
+
+  $().ready(function(){
+    statusTable = new StatusTable(statusTableEl);
   })
 
   function showReportToast(message) {
@@ -154,6 +194,11 @@
     var showToastButton = document.querySelector('#demo-show-toast');
     snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
   }
+
+  // Button events
+  $('.ping-button').on('click',function(e){
+    pingDevices();
+  })
 
   </script>
 
