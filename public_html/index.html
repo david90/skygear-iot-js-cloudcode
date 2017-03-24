@@ -18,52 +18,56 @@
   <body>
 
 
-<style>
-.demo-layout-transparent {
-  background: url('../assets/demos/transparent.jpg') center / cover;
-}
-.demo-layout-transparent .mdl-layout__header,
-.demo-layout-transparent .mdl-layout__drawer-button {
-  /* This background is dark, so we set text to white. Use 87% black instead if
-     your background is light. */
-  color: white;
-}
-</style>
+  <style>
+  .demo-layout-transparent {
+    background: url('../assets/demos/transparent.jpg') center / cover;
+  }
+  .demo-layout-transparent .mdl-layout__header,
+  .demo-layout-transparent .mdl-layout__drawer-button {
+    /* This background is dark, so we set text to white. Use 87% black instead if
+       your background is light. */
+    color: white;
+  }
+  </style>
 
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--2-col"></div>
-  <div class="mdl-cell mdl-cell--4-col">
-      <h5>Click to manually ping all devices.</h5>
-      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ping-button">
-    Ping
-  </button>
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col"></div>
+    <div class="mdl-cell mdl-cell--6-col">Current ID: <span class="currentUserId">Loading..</span></div>
   </div>
-  <div class="mdl-cell mdl-cell--4-col"></div>
-</div>
 
-
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--2-col"></div>
-  <div class="mdl-cell mdl-cell--4-col">
-  <h5>Device Status</h5>
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
-      <thead>
-        <tr>
-          <th class="mdl-data-table__cell--non-numeric">Device</th>
-          <th>Platform</th>
-          <th>Last Report</th>
-        </tr>
-      </thead>
-      <tbody class="status-table">
-      <!-- Device Status here -->
-      </tbody>
-    </table>
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col"></div>
+    <div class="mdl-cell mdl-cell--4-col">
+        <h5>Click to manually ping all devices.</h5>
+        <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent ping-button">
+      Ping
+    </button>
+    </div>
+    <div class="mdl-cell mdl-cell--4-col"></div>
   </div>
-</div>
-<div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
-  <div class="mdl-snackbar__text"></div>
-  <button class="mdl-snackbar__action" type="button"></button>
-</div>
+
+  <div class="mdl-grid">
+    <div class="mdl-cell mdl-cell--2-col"></div>
+    <div class="mdl-cell mdl-cell--4-col">
+    <h5>Device Status</h5>
+      <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
+        <thead>
+          <tr>
+            <th class="mdl-data-table__cell--non-numeric">Device</th>
+            <th>Platform</th>
+            <th>Last Report</th>
+          </tr>
+        </thead>
+        <tbody class="status-table">
+        <!-- Device Status here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="demo-toast-example" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+  </div>
 
   <script>
 
@@ -75,10 +79,12 @@
     console.log('skygear container is now ready for making API calls.');
 
     if (skygear.currentUser) {
+        $('.currentUserId').text(skygear.currentUser.id);
         subscribeAllHandlers();
     } else {
       skygear.signupAnonymously().then((user) => {
         console.log(user); // user object with undefined email and username
+        $('.currentUserId').text(skygear.currentUser.id);
         subscribeAllHandlers();
       }, (error) => {
         console.error(error);
