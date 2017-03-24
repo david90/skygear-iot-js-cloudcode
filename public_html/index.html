@@ -78,6 +78,15 @@
   }).then(() => {
     console.log('skygear container is now ready for making API calls.');
 
+    setupDeviceUser();
+
+  }, (error) => {
+    console.error(error);
+  });
+
+  // We are going to make sure the web panel has a current user,
+  // if not, we will sign up one anonymously
+  function setupDeviceUser () {
     if (skygear.currentUser) {
         $('.currentUserId').text(skygear.currentUser.id);
         subscribeAllHandlers();
@@ -90,19 +99,13 @@
         console.error(error);
       });
     }
-
-  }, (error) => {
-    console.error(error);
-  });
+  }
 
   /** Pubsub **/
-
   // Subscribe to ping events
   function subscribePing() {
       skygear.on('ping', (data) => {
       console.log(data);
-
-      $("#p2").hide();
       replyToPing();
     });
   }
@@ -112,6 +115,8 @@
       // whenever a device replies
       skygear.on('reply', (data) => {
       console.log('A device replied!');
+
+      $("#p2").hide(); // hide the progress bar when there is ping reply data
       statusTable.updateRecord(data)
     });
   }
@@ -134,22 +139,21 @@
     subscribeReportSaved();
   }
 
-  // We initiated a ping from the web pannel
+  // We can initiate a ping from the web pannel
   function pingDevices() {
-      skygear.pubsub.publish('ping',{msg:"from web pannel"});
+    skygear.pubsub.publish('ping',{msg:"from web pannel"});
   }
 
   // The web pannel will reply to the ping also
   function replyToPing() {
-      skygear.pubsub.publish('reply',{
-        device: skygear.currentUser.id,
-        platform: 'web pannel',
-        lastReply: Date()
-      });
+    skygear.pubsub.publish('reply',{
+      device: skygear.currentUser.id,
+      platform: 'web pannel',
+      lastReply: Date()
+    });
   }
 
   /* UI */
-
   // The status table view controller
   var statusTable = null;
   var statusTableEl = $('.status-table');
@@ -193,15 +197,17 @@
 
   }
 
-  $().ready(function(){
-    statusTable = new StatusTable(statusTableEl);
-  })
-
   function showReportToast(message) {
     var snackbarContainer = document.querySelector('#demo-toast-example');
     var showToastButton = document.querySelector('#demo-show-toast');
     snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
   }
+
+
+  // Ready function when the app is loaded
+  $().ready(function(){
+    statusTable = new StatusTable(statusTableEl);
+  })
 
   // Button events
   $('.ping-button').on('click',function(e){
