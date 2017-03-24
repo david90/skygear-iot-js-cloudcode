@@ -36,6 +36,7 @@ skygearCloud.handler('/ping-devices', function (req) {
 skygearCloud.afterSave('Report', function afterSaveReport(record, orig) {
     console.log('afterSave Report');
 
+    var container = getContainer(adminId);
     container.pubsub.connect();
     container.pubsub.publish('report-saved', record);
 });
