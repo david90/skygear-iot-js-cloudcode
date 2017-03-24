@@ -79,13 +79,11 @@
     console.log('skygear container is now ready for making API calls.');
 
     if (skygear.currentUser) {
-      subscribePing();
-      subscribeReply();
+        subscribeAllHandlers();
     } else {
       skygear.signupAnonymously().then((user) => {
         console.log(user); // user object with undefined email and username
-        subscribePing();
-        subscribeReply();
+        subscribeAllHandlers();
       }, (error) => {
         console.error(error);
       });
@@ -98,7 +96,7 @@
   /** Pubsub **/
 
   // Subscribe to ping events
-  function subscribePing(){
+  function subscribePing() {
       skygear.on('ping', (data) => {
       console.log(data);
       replyToPing();
@@ -106,7 +104,7 @@
   }
 
   // Subscribe to reply events
-  function subscribeReply(){
+  function subscribeReply() {
       // whenever a device replies
       skygear.on('reply', (data) => {
       console.log('A device replied!');
@@ -114,6 +112,21 @@
     });
   }
 
+  // We also subscribe to Report saved event
+  function subscribeReportSaved() {
+      skygear.on('report-saved', (data) => {
+      console.log(data);
+      var message = 'Report saved from device'
+      showReportToast(message);
+    });
+  }
+
+  // A wrapper for all subscriptions
+  function subscribeAllHandlers() {
+    subscribePing();
+    subscribeReply();
+    subscribeReportSaved();
+  }
 
   // We initiated a ping from the web pannel
   function pingDevices() {
@@ -129,14 +142,6 @@
       });
   }
 
-  // We also subscribe to Report saved event
-  function subscribeReportSaved(){
-      skygear.on('report-saved', (data) => {
-      console.log(data);
-      var message = 'Report saved from device'
-      showReportToast(message);
-    });
-  }
 
   /* UI */
 
