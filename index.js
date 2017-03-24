@@ -16,7 +16,7 @@ function pingDevices() {
   // ping them
   var container = getContainer(adminId);
   container.pubsub.connect();
-  container.pubsub.publish('ping', {msg: 'nothing'});
+  container.pubsub.publish('ping', {msg: 'from scheduled system'});
 
 }
 
@@ -35,4 +35,7 @@ skygearCloud.handler('/ping-devices', function (req) {
 
 skygearCloud.afterSave('Report', function afterSaveReport(record, orig) {
     console.log('afterSave Report');
+
+    container.pubsub.connect();
+    container.pubsub.publish('report-saved', record);
 });
