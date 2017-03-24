@@ -20,8 +20,8 @@ function pingDevices() {
 
 }
 
-/* Auto ping every 1 minute */
-skygearCloud.every('0 * * * * *', function () {
+/* Auto ping every 30 sec */
+skygearCloud.every('*/30 * * * * *', function () {
   console.log('in scheduled ping cronjob');
   pingDevices();
 });
