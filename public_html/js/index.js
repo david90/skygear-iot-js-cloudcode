@@ -80,6 +80,20 @@ function replyToPing() {
   });
 }
 
+/* Save Report Record */
+// Save a Report record according to content
+function saveReportRecord(content) {
+  ReportRecord = skygear.Record.extend("Report");
+  reportRecord = new ReportRecord();
+  reportRecord.content = content;
+  skygear.publicDB.save(reportRecord);
+}
+
+$('#save-record-button').on('click', function(){
+  var content = $('#sample-record').val();
+  saveReportRecord(content);
+})
+
 /* UI */
 // The status table view controller
 var statusTable = null;
