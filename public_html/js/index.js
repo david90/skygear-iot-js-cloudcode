@@ -18,9 +18,9 @@ function setupDeviceUser () {
     $('.currentUserId').text(skygear.currentUser.id);
     subscribeAllHandlers();
   } else {
-    skygear.signupAnonymously().then((user) => {
+    skygear.auth.signupAnonymously().then((user) => {
       console.log(user); // user object with undefined email and username
-      $('.currentUserId').text(skygear.currentUser.id);
+      $('.currentUserId').text(skygear.auth.currentUser.id);
       subscribeAllHandlers();
     }, (error) => {
       console.error(error);
@@ -31,7 +31,7 @@ function setupDeviceUser () {
 /** Pubsub **/
 // Subscribe to ping events
 function subscribePing() {
-  skygear.on('ping', (data) => {
+  skygear.pubsub.on('ping', (data) => {
     console.log(data);
     replyToPing();
   });
@@ -40,7 +40,7 @@ function subscribePing() {
 // Subscribe to reply events
 function subscribeReply() {
     // whenever a device replies
-  skygear.on('reply', (data) => {
+  skygear.pubsub.on('reply', (data) => {
     console.log('A device replied!');
 
     $("#p2").hide(); // hide the progress bar when there is ping reply data
@@ -50,7 +50,7 @@ function subscribeReply() {
 
 // We also subscribe to Report saved event
 function subscribeReportSaved() {
-  skygear.on('report-saved', (data) => {
+  skygear.pubsub.on('report-saved', (data) => {
     console.log(data);
     var reportId = data._id;
     var content = data.content;
@@ -74,7 +74,7 @@ function pingDevices() {
 // The web pannel will reply to the ping also
 function replyToPing() {
   skygear.pubsub.publish('reply',{
-    device: skygear.currentUser.id,
+    device: skygear.auth.currentUser.id,
     platform: 'web pannel',
     lastReply: Date()
   });
