@@ -14,13 +14,13 @@ skygear.config({
 // We are going to make sure the web panel has a current user,
 // if not, we will sign up one anonymously
 function setupDeviceUser () {
-  if (skygear.currentUser) {
-    $('.currentUserId').text(skygear.currentUser.id);
+  if (skygear.auth.currentUser) {
+    $('.currentUserId').text(skygear.auth.currentUser.id);
     subscribeAllHandlers();
   } else {
     skygear.auth.signupAnonymously().then((user) => {
       console.log(user); // user object with undefined email and username
-      $('.currentUserId').text(skygear.auth.currentUser.id);
+      $('.currentUserId').text(user.id);
       subscribeAllHandlers();
     }, (error) => {
       console.error(error);
