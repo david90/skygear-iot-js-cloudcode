@@ -33,6 +33,9 @@ function setupDeviceUser () {
 function subscribePing() {
   skygear.pubsub.on('ping', (data) => {
     console.log(data);
+    let message = `Ping msg: ${data.msg}`
+    showPingToast(message);
+
     replyToPing();
   });
 }
@@ -141,6 +144,13 @@ function StatusTable (el) {
 }
 
 function showReportToast(message) {
+  var snackbarContainer = document.querySelector('#demo-toast-example');
+  var showToastButton = document.querySelector('#demo-show-toast');
+  snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
+}
+
+
+function showPingToast(message) {
   var snackbarContainer = document.querySelector('#demo-toast-example');
   var showToastButton = document.querySelector('#demo-show-toast');
   snackbarContainer.MaterialSnackbar.showSnackbar({message: message});
