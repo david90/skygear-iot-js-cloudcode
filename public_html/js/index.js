@@ -86,7 +86,9 @@ function saveReportRecord(content) {
   ReportRecord = skygear.Record.extend("Report");
   reportRecord = new ReportRecord();
   reportRecord.content = content;
-  skygear.publicDB.save(reportRecord);
+  skygear.publicDB.save(reportRecord).then(record => {
+    skygear.pubsub.publish('report-saved', record);
+  });
 }
 
 $('#save-record-button').on('click', function(){
